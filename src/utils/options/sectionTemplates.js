@@ -1,0 +1,17 @@
+export const sectionTemplates = [
+  { value: 'header', label: 'Header Section' },
+  { value: 'hero', label: 'Hero Section' },
+  { value: 'contact-form', label: 'Contact Form Section' },
+  { value: 'services', label: 'Services Section' },
+  { value: 'testimonials', label: 'Testimonials Section' },
+  { value: 'video-showcase', label: 'Video Showcase Section' },
+  { value: 'featured-product', label: 'Featured Product Section' },
+  { value: 'statistics', label: 'Statistics Section' },
+  { value: 'top-choice', label: 'Top Choice Section' },
+  { value: 'cta-banner', label: 'CTA Banner Section' },
+  { value: 'how-it-works', label: 'How It Works Section' },
+  { value: 'best-choice', label: 'Best Choice Section' },
+  { value: 'highlights', label: 'Highlights Section' },
+  { value: 'faq', label: 'FAQ Section' },
+  { value: 'footer', label: 'Footer Section' },
+];

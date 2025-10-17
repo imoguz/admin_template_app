@@ -1,0 +1,14 @@
+/* Ant Design Overrides*/
+.ant-modal,
+.ant-modal *,
+.ant-btn,
+.ant-row,
+.ant-col,
+.ant-typography {
+  font-family: var(--font-roboto), -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    sans-serif !important;
+}
+
+.ant-layout-header {
+  line-height: 0;
+}
