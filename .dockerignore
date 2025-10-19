@@ -1,0 +1,16 @@
+node_modules
+.next
+build
+coverage
+.git
+.vscode
+README.md
+LICENSE
+*.log
+.env*
+.DS_Store
+cypress
+cypress.config.*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

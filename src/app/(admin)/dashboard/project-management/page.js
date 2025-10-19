@@ -55,9 +55,8 @@ export default function ProjectsPage() {
   const { data, isLoading, isError, refetch } = useGetProjectsQuery();
   const [deleteProject] = useDeleteProjectMutation();
 
-  const projects = data?.data ?? [];
+  const projects = useMemo(() => data?.data ?? [], [data]);
 
-  // Memoized statistics
   const stats = useMemo(
     () => ({
       total: projects.length,

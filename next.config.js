@@ -1,30 +1,47 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  env: {
-    ACCESS_KEY: process.env.ACCESS_KEY,
-  },
+  output: 'standalone',
+
   images: {
-    domains: ['localhost', '127.0.0.1', 'production-domain.com'],
     remotePatterns: [
-      {
-        protocol: 'http',
-        hostname: 'localhost',
-        port: '8000',
-        pathname: '/api/v1/uploads/**',
-      },
       {
         protocol: 'http',
         hostname: '127.0.0.1',
         port: '8000',
         pathname: '/api/v1/uploads/**',
       },
+      {
+        protocol: 'http',
+        hostname: 'backend',
+        port: '8000',
+        pathname: '/api/v1/uploads/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'production-domain.com',
+        pathname: '/api/v1/uploads/**',
+      },
     ],
   },
+
   webpack: (config) => {
-    config.resolve.alias.canvas = false;
-    config.resolve.alias.encoding = false;
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      canvas: false,
+      encoding: false,
+    };
+
     return config;
   },
+
+  compiler: {
+    removeConsole:
+      process.env.NODE_ENV === 'production'
+        ? { exclude: ['error', 'warn'] }
+        : false,
+  },
+
+  poweredByHeader: false,
 };
 
 module.exports = nextConfig;

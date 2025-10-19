@@ -1,10 +1,9 @@
-// components/section-renderer/SectionRenderer.jsx
 'use client';
 
 import React, { memo } from 'react';
 import dynamic from 'next/dynamic';
+import { Skeleton, Row, Col } from 'antd';
 
-// Dynamic imports for section components
 const sectionComponents = {
   'Top Choice Section': dynamic(() => import('./top-choice/TopChoiceSection')),
   'Hero Section': dynamic(() => import('./hero/HeroSection')),
@@ -13,10 +12,8 @@ const sectionComponents = {
   ),
 };
 
-// Default fallback component
 const DefaultSection = ({ section }) => (
   <div className="border-2 border-dashed border-yellow-400 bg-yellow-50 p-8 rounded-lg text-center my-8">
-    <div className="text-4xl mb-4">🚧</div>
     <h3 className="text-xl font-semibold text-gray-800 mb-2">
       {section.title || 'Unnamed Section'}
     </h3>
@@ -25,25 +22,25 @@ const DefaultSection = ({ section }) => (
     </p>
     <div className="bg-white p-4 rounded border">
       <p className="text-sm text-gray-500">
-        Section component for <code>&quot;{section.template?.name}&quot;</code>{' '}
-        not found.
+        Section component for &quot;{section.template?.name}&quot; not found.
       </p>
     </div>
   </div>
 );
 
-// Loading component for dynamic imports
-const SectionLoading = ({ section }) => (
-  <div className="animate-pulse bg-gray-100 rounded-lg p-8 my-8">
-    <div className="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
-    <div className="h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
-    <div className="h-32 bg-gray-200 rounded"></div>
+const SectionLoading = () => (
+  <div className="my-8 p-6">
+    <Row gutter={[16, 16]}>
+      <Col span={24}>
+        <Skeleton active paragraph={{ rows: 3 }} title={{ width: '60%' }} />
+      </Col>
+    </Row>
   </div>
 );
 
 const SectionRenderer = memo(({ section }) => {
   if (!section?.isActive) {
-    return null; // Skip inactive sections
+    return null;
   }
 
   const SectionComponent = sectionComponents[section.template?.name];
@@ -59,8 +56,7 @@ const SectionRenderer = memo(({ section }) => {
       data-section-type={section.template?.name}
       data-section-id={section._id}
     >
-      {/* Loading fallback ekleyelim */}
-      <React.Suspense fallback={<SectionLoading section={section} />}>
+      <React.Suspense fallback={<SectionLoading />}>
         <SectionComponent data={section.data || {}} section={section} />
       </React.Suspense>
     </section>
