@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Form, Input, Button, Card, Switch, InputNumber } from 'antd';
 import {
   PlusOutlined,
@@ -18,6 +18,7 @@ export default function TopChoiceSection({ section, projectId }) {
   const [form] = Form.useForm();
   const [updateSection, { isLoading }] = useUpdateSectionMutation();
   const [cardImages, setCardImages] = useState({});
+  const [removedImages, setRemovedImages] = useState(new Set());
 
   // Initial values
   const initialValues = {
@@ -33,9 +34,10 @@ export default function TopChoiceSection({ section, projectId }) {
       highlightText: section.data?.highlightBox?.highlightText || '',
     },
     cards:
-      section.data?.cards?.map((card) => ({
+      section.data?.cards?.map((card, index) => ({
         ...card,
-        image: card.image?.url || card.image || '',
+        image: card.image || null,
+        _id: card.id || `card-${index}`,
       })) || [],
     gridConfig: section.data?.gridConfig || {
       xs: 24,
@@ -46,22 +48,54 @@ export default function TopChoiceSection({ section, projectId }) {
     },
   };
 
+  // Reset states when section changes
+  useEffect(() => {
+    setCardImages({});
+    setRemovedImages(new Set());
+  }, [section._id]);
+
   const handleCardImageChange = (cardId, file) => {
     setCardImages((prev) => ({
       ...prev,
       [cardId]: file,
     }));
+    setRemovedImages((prev) => {
+      const newSet = new Set(prev);
+      newSet.delete(cardId);
+      return newSet;
+    });
+  };
+
+  const handleCardImageRemove = (cardId) => {
+    setRemovedImages((prev) => new Set(prev).add(cardId));
+    setCardImages((prev) => {
+      const newImages = { ...prev };
+      delete newImages[cardId];
+      return newImages;
+    });
   };
 
   const handleSave = async (values) => {
     try {
       const formData = new FormData();
 
-      // basic fields
       formData.append('title', values.sectionTitle);
       formData.append('isActive', values.isActive);
 
-      // data objects without image
+      // Prepare cards data
+      const cardsData = values.cards.map((card, index) => {
+        const cardId = card._id || card.id;
+        const imageFile = cardImages[cardId];
+
+        return {
+          id: cardId,
+          title: card.title,
+          subtitle: card.subtitle,
+          description: card.description,
+          image: imageFile ? 'UPLOAD_NEW' : card.image,
+        };
+      });
+
       const data = {
         eyebrow: values.eyebrow,
         title: values.title,
@@ -69,25 +103,18 @@ export default function TopChoiceSection({ section, projectId }) {
         backgroundColor: values.backgroundColor,
         highlightBox: values.highlightBox,
         gridConfig: values.gridConfig,
-        cards: values.cards.map((card, index) => {
-          const imageFile = cardImages[card.id];
-          return {
-            id: card.id,
-            title: card.title,
-            subtitle: card.subtitle,
-            description: card.description,
-            image: imageFile ? '' : card.image,
-          };
-        }),
+        cards: cardsData,
       };
 
       formData.append('data', JSON.stringify(data));
 
-      // Add image files
+      // Add image files to FormData
       values.cards.forEach((card, index) => {
-        const imageFile = cardImages[card.id];
+        const cardId = card._id || card.id;
+        const imageFile = cardImages[cardId];
+
         if (imageFile) {
-          formData.append(`cards[${index}][image]`, imageFile);
+          formData.append(`cardImage_${index}`, imageFile);
         }
       });
 
@@ -99,9 +126,10 @@ export default function TopChoiceSection({ section, projectId }) {
 
       notify.success('Success', 'Section updated successfully!');
       setCardImages({});
+      setRemovedImages(new Set());
     } catch (error) {
-      console.error('Update error:', error);
-      notify.error('Error', 'Failed to update section');
+      const errorMessage = error?.data?.message || 'Failed to update section';
+      notify.error('Error', errorMessage);
     }
   };
 
@@ -150,7 +178,6 @@ export default function TopChoiceSection({ section, projectId }) {
             <Form.Item name="sectionTitle" label="Section Title">
               <Input placeholder="Section display name" />
             </Form.Item>
-
             <Form.Item name="isActive" label="Active" valuePropName="checked">
               <Switch />
             </Form.Item>
@@ -162,11 +189,9 @@ export default function TopChoiceSection({ section, projectId }) {
           <Form.Item name="eyebrow" label="Eyebrow Text">
             <Input placeholder="🏆 Excellence in Education" />
           </Form.Item>
-
           <Form.Item name="title" label="Main Title">
             <Input placeholder="Why Choose Us?" />
           </Form.Item>
-
           <Form.Item name="subtitle" label="Subtitle">
             <TextArea
               rows={3}
@@ -184,11 +209,9 @@ export default function TopChoiceSection({ section, projectId }) {
           >
             <Switch />
           </Form.Item>
-
           <Form.Item name={['highlightBox', 'text']} label="Main Text">
             <TextArea rows={4} placeholder="Main highlight text content..." />
           </Form.Item>
-
           <Form.Item
             name={['highlightBox', 'highlightText']}
             label="Special Highlight Text"
@@ -214,8 +237,8 @@ export default function TopChoiceSection({ section, projectId }) {
                   cards: [
                     ...currentCards,
                     {
-                      id: `card-${Date.now()}`,
-                      image: '',
+                      _id: `card-${Date.now()}`,
+                      image: null,
                       title: 'New Feature',
                       subtitle: 'Feature subtitle',
                       description: 'Feature description',
@@ -230,19 +253,20 @@ export default function TopChoiceSection({ section, projectId }) {
         >
           <Form.List name="cards">
             {(fields, { remove }) => {
-              // Güncel kartları alıyoruz
               const cards = form.getFieldValue('cards') || [];
 
               return (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {cards.map((card, index) => {
-                    // Form.List’in field bilgisi
                     const field = fields[index];
                     if (!field) return null;
 
+                    const cardId = card._id || card.id;
+                    const currentImage = card.image?.url || card.image;
+
                     return (
                       <Card
-                        key={card.id} // id üzerinden key, sıra değişiminde korunur
+                        key={cardId}
                         size="small"
                         title={`Card ${index + 1}`}
                         className="relative"
@@ -264,7 +288,10 @@ export default function TopChoiceSection({ section, projectId }) {
                               danger
                               size="small"
                               icon={<DeleteOutlined />}
-                              onClick={() => remove(field.name)}
+                              onClick={() => {
+                                remove(field.name);
+                                handleCardImageRemove(cardId);
+                              }}
                             />
                           </div>
                         }
@@ -274,12 +301,18 @@ export default function TopChoiceSection({ section, projectId }) {
                             Card Image
                           </label>
                           <ImageUpload
-                            value={card.image}
+                            value={currentImage}
                             onChange={(file) =>
-                              handleCardImageChange(card.id, file)
+                              handleCardImageChange(cardId, file)
                             }
+                            onRemove={() => handleCardImageRemove(cardId)}
                             maxCount={1}
                           />
+                          {currentImage && !cardImages[cardId] && (
+                            <div className="text-xs text-gray-500 mt-1">
+                              Current image will be kept
+                            </div>
+                          )}
                         </div>
 
                         <Form.Item
@@ -323,19 +356,15 @@ export default function TopChoiceSection({ section, projectId }) {
             <Form.Item name={['gridConfig', 'xs']} label="Mobile">
               <InputNumber min={1} max={24} className="w-full" />
             </Form.Item>
-
             <Form.Item name={['gridConfig', 'sm']} label="Tablet">
               <InputNumber min={1} max={24} className="w-full" />
             </Form.Item>
-
             <Form.Item name={['gridConfig', 'md']} label="Desktop">
               <InputNumber min={1} max={24} className="w-full" />
             </Form.Item>
-
             <Form.Item name={['gridConfig', 'lg']} label="Large Desktop">
               <InputNumber min={1} max={24} className="w-full" />
             </Form.Item>
-
             <Form.Item
               name={['gridConfig', 'gutter']}
               label="Spacing Between Cards"

@@ -23,7 +23,7 @@ const LoginPage = () => {
   // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated && token) {
-      const targetPath = redirect || '/projects';
+      const targetPath = redirect || '/dashboard';
       console.log('Redirecting authenticated user to:', targetPath);
       router.replace(targetPath);
     }

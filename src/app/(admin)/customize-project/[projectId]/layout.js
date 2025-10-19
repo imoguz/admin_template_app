@@ -9,7 +9,7 @@ import {
 } from '@ant-design/icons';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
-import SiderHeader from '@/components/common/SiderHeader';
+import CustomizeSiderHeader from '@/components/common/CustomizeSiderHeader';
 import { useGetProjectQuery } from '@/rtk/api/projectApi';
 import SectionManager from '@/components/section-manage/SectionManager';
 
@@ -90,7 +90,7 @@ export default function CustomizeLayout({ children, params }) {
             shape={collapsed ? 'circle' : 'default'}
             icon={<EyeOutlined />}
             block
-            onClick={() => router.push(`/projects/customize/${projectId}`)}
+            onClick={() => router.push(`/customize-project/${projectId}`)}
           >
             {collapsed ? '' : 'Preview Project'}
           </Button>
@@ -110,7 +110,10 @@ export default function CustomizeLayout({ children, params }) {
         <Header
           className={`sticky top-0 bg-sider shadow-sm border-0 border-l border-solid border-gray-200 p-0 h-16 flex items-center z-[99] transition-all duration-300`}
         >
-          <SiderHeader project={project} section={selectedSection?.title} />
+          <CustomizeSiderHeader
+            project={project}
+            section={selectedSection?.title}
+          />
         </Header>
 
         <Content className="m-4 overflow-auto bg-white rounded-lg">

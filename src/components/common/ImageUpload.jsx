@@ -1,44 +1,42 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Upload } from 'antd';
+import { getImageUrl } from '@/utils/helpers';
 
 export default function ImageUpload({ value, onChange, maxCount = 1 }) {
-  const [fileList, setFileList] = useState(
-    value
-      ? [
-          {
-            uid: '-1',
-            name: 'image',
-            status: 'done',
-            url: value,
-          },
-        ]
-      : []
-  );
+  const [fileList, setFileList] = useState([]);
 
-  const handleChange = ({ file, fileList: newFileList }) => {
+  useEffect(() => {
+    if (value) {
+      setFileList([
+        {
+          uid: '-1',
+          name: 'current-image',
+          status: 'done',
+          url: getImageUrl(value),
+        },
+      ]);
+    } else {
+      setFileList([]);
+    }
+  }, [value]);
+
+  const handleChange = ({ fileList: newFileList }) => {
     setFileList(newFileList);
 
-    if (file.originFileObj) {
-      onChange?.(file.originFileObj);
+    const firstFile = newFileList[0];
+
+    if (firstFile?.originFileObj) {
+      onChange?.(firstFile.originFileObj);
     } else if (newFileList.length === 0) {
       onChange?.(null);
     }
   };
 
-  const handlePreview = async (file) => {
-    let src = file.url;
-    if (!src) {
-      src = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file.originFileObj);
-        reader.onload = () => resolve(reader.result);
-      });
-    }
-    const image = new Image();
-    image.src = src;
-    const imgWindow = window.open(src);
-    imgWindow?.document.write(image.outerHTML);
+  const handleRemove = () => {
+    setFileList([]);
+    onChange?.(null);
+    return true;
   };
 
   return (
@@ -46,8 +44,10 @@ export default function ImageUpload({ value, onChange, maxCount = 1 }) {
       listType="picture-card"
       fileList={fileList}
       onChange={handleChange}
-      onPreview={handlePreview}
+      onRemove={handleRemove}
+      beforeUpload={() => false}
       maxCount={maxCount}
+      accept="image/*"
       className="hide-tooltips"
     >
       {fileList.length < maxCount && '+ Upload'}

@@ -8,7 +8,7 @@ import { Button, Tag } from 'antd';
 import { Typography } from 'antd';
 const { Title } = Typography;
 
-const SiderHeader = ({ project, section = 'Preview Mode' }) => {
+const CustomizeSiderHeader = ({ project, section = 'Preview Mode' }) => {
   const router = useRouter();
 
   return (
@@ -16,7 +16,7 @@ const SiderHeader = ({ project, section = 'Preview Mode' }) => {
       <Button
         type="default"
         icon={<LeftOutlined />}
-        onClick={() => router.push(`/projects`)}
+        onClick={() => router.push(`/dashboard/project-management`)}
       >
         Back to Projects
       </Button>
@@ -28,13 +28,9 @@ const SiderHeader = ({ project, section = 'Preview Mode' }) => {
           {section}
         </Tag>
       </div>
-      <div className="flex gap-5 items-center">
-        <BellOutlined />
-        <SettingOutlined />
-        <UserMenu />
-      </div>
+      <div className="flex gap-5 items-center"></div>
     </div>
   );
 };
 
-export default SiderHeader;
+export default CustomizeSiderHeader;

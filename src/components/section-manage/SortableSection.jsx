@@ -46,7 +46,7 @@ const SortableSection = ({ section, projectId, sectionId, router }) => {
         isDragging ? 'opacity-50 shadow-lg' : 'border border-gray-200'
       } border-solid rounded-lg select-none min-h-12 p-1 cursor-pointer`}
       onClick={() =>
-        router.push(`/projects/customize/${projectId}/${section._id}`)
+        router.push(`/customize-project//${projectId}/${section._id}`)
       }
     >
       <div

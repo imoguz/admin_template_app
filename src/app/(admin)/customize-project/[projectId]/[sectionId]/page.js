@@ -16,7 +16,8 @@ export default function CustomizeSectionPage() {
 
   const project = data?.data;
   const section = project?.sections.find((s) => s._id === sectionId);
-
+  console.log('project:', project);
+  console.log('section:', section);
   if (!section) {
     return <div className="p-6 text-gray-500">Section not found</div>;
   }

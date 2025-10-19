@@ -17,6 +17,7 @@ export default function ProjectPage() {
 
   const project = data?.data;
 
+  console.log('log project', project);
   if (!project) {
     return <div className="p-6 text-gray-500">Project not found</div>;
   }
@@ -29,20 +30,20 @@ export default function ProjectPage() {
 
   // Dynamic section renderer
   const renderSection = (section) => {
+    console.log('log section', section);
     if (!section.isActive) return null;
 
     const sectionProps = {
-      key: section._id,
       data: section.data || {},
     };
 
     switch (section.template.slug) {
       case 'hero':
-        return <HeroSection {...sectionProps} />;
-      case 'top-choice':
-        return <TopChoiceSection {...sectionProps} />;
+        return <HeroSection key={section._id} {...sectionProps} />;
+      case 'top-choice-section':
+        return <TopChoiceSection key={section._id} {...sectionProps} />;
       case 'featured-product':
-        return <FeaturedProductSection {...sectionProps} />;
+        return <FeaturedProductSection key={section._id} {...sectionProps} />;
       default:
         console.warn(`Unknown section template: ${section.template.slug}`);
         return (

@@ -20,6 +20,7 @@ export default function DataTable({
   selectedRowKeys = [],
   setSelectedRowKeys,
   columns = [],
+  dataSource = [],
   selectMenuItems = [],
   showSearchInput = false,
   onRowClick,
@@ -30,6 +31,7 @@ export default function DataTable({
   editingKey = '',
   onSave = () => {},
   onDelete = () => {},
+  loading = false,
   ...props
 }) {
   const [searchText, setSearchText] = useState(tableState.searchText || '');
@@ -127,6 +129,8 @@ export default function DataTable({
             }),
           };
         })}
+        dataSource={dataSource}
+        loading={loading}
         onRow={
           onRowClick
             ? (record) => ({

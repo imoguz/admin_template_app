@@ -25,7 +25,7 @@ const handleLogout = async (api) => {
 export const customBaseQuery = async (args, api, extraOptions) => {
   let result = await rawBaseQuery(args, api, extraOptions);
 
-  if (result?.error && args?.meta?.skipAuth) {
+  if (args?.meta?.skipAuth) {
     return result;
   }
 

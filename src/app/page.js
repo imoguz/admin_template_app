@@ -5,25 +5,26 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { Spin } from 'antd';
 
-const Home = () => {
+export default function Home() {
   const router = useRouter();
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated, isLoading } = useSelector((state) => state.auth);
 
   useEffect(() => {
+    // auth yüklenmemişse (örneğin refresh sonrası)
+    if (isLoading) return;
+
     if (isAuthenticated) {
-      router.replace('/projects');
+      router.replace('/dashboard');
     } else {
       router.replace('/auth/login');
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, isLoading, router]);
 
   return (
     <div className="w-full h-screen flex flex-col gap-3 items-center justify-center bg-sky-300">
-      <h1>Admin Template App</h1>
+      <h1 className="text-lg font-semibold">Admin Template App</h1>
       <Spin size="large" />
       <span className="text-blue-500">Redirecting...</span>
     </div>
   );
-};
-
-export default Home;
+}

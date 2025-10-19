@@ -4,60 +4,60 @@ import { customBaseQuery } from '../customBaseQuery';
 export const sectionTemplateApi = createApi({
   reducerPath: 'sectionTemplateApi',
   baseQuery: customBaseQuery,
-  tagTypes: ['SectionTemplates'],
+  tagTypes: ['SectionTemplate'],
   endpoints: (builder) => ({
     getSectionTemplates: builder.query({
       query: () => ({
         url: '/section-template',
         method: 'GET',
       }),
-      providesTags: ['SectionTemplates'],
+      providesTags: ['SectionTemplate'],
     }),
 
     getSectionTemplate: builder.query({
       query: (id) => ({
-        url: `/section-templates/${id}`,
+        url: `/section-template/${id}`,
         method: 'GET',
       }),
-      providesTags: (_result, _error, id) => [{ type: 'SectionTemplates', id }],
+      providesTags: (_result, _error, id) => [{ type: 'SectionTemplate', id }],
     }),
 
     createSectionTemplate: builder.mutation({
       query: (body) => ({
-        url: '/section-templates',
+        url: '/section-template',
         method: 'POST',
         body,
         headers: { 'Content-Type': 'application/json' },
       }),
-      invalidatesTags: ['SectionTemplates'],
+      invalidatesTags: ['SectionTemplate'],
     }),
 
     updateSectionTemplate: builder.mutation({
       query: ({ id, body }) => ({
-        url: `/section-templates/${id}`,
+        url: `/section-template/${id}`,
         method: 'PUT',
         body,
         headers: { 'Content-Type': 'application/json' },
       }),
       invalidatesTags: (_result, _error, { id }) => [
-        { type: 'SectionTemplates', id },
-        { type: 'SectionTemplates' },
+        { type: 'SectionTemplate', id },
+        { type: 'SectionTemplate' },
       ],
     }),
 
     deleteSectionTemplate: builder.mutation({
       query: (id) => ({
-        url: `/section-templates/${id}`,
+        url: `/section-template/${id}`,
         method: 'DELETE',
       }),
-      invalidatesTags: ['SectionTemplates'],
+      invalidatesTags: ['SectionTemplate'],
     }),
   }),
 });
 
 export const {
-  useGetSectionTemplatesQuery,
   useGetSectionTemplateQuery,
+  useGetSectionTemplatesQuery,
   useCreateSectionTemplateMutation,
   useUpdateSectionTemplateMutation,
   useDeleteSectionTemplateMutation,

@@ -1,34 +1,30 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { Row, Col } from 'antd';
-import Image from 'next/image';
 import { motion, useInView } from 'framer-motion';
 import {
   fadeInUp,
   staggerContainer,
 } from '@/utils/constants/animationVariants';
-import { getImageUrl } from '@/utils/helpers'; // ✅ getImageUrl import et
 
 const TopChoiceCard = ({ card, index }) => {
-  const [imageError, setImageError] = useState(false);
-
-  // Image URL - ✅ getImageUrl kullan
-  const getImageUrlForCard = () => {
+  // Image URL
+  const getImageUrl = () => {
     if (!card.image) return null;
 
     if (typeof card.image === 'object' && card.image.url) {
-      return getImageUrl(card.image.url); // ✅ getImageUrl kullan
+      return card.image.url;
     }
 
     if (typeof card.image === 'string') {
-      return getImageUrl(card.image); // ✅ getImageUrl kullan
+      return card.image;
     }
 
     return null;
   };
 
-  const imageUrl = getImageUrlForCard();
+  const imageUrl = getImageUrl();
   const { title, subtitle, description } = card;
 
   return (
@@ -46,22 +42,15 @@ const TopChoiceCard = ({ card, index }) => {
       }}
     >
       {/* Image Section */}
-      <div className="relative w-full h-48 overflow-hidden bg-gray-100">
-        {imageUrl && !imageError ? (
-          <Image
-            src={imageUrl}
-            alt={title || 'Feature image'}
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-            className="object-contain transition-transform duration-300 hover:scale-110"
-            onError={() => setImageError(true)}
-            onLoad={() => setImageError(false)}
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gray-200">
-            <span className="text-gray-400 text-sm">No image</span>
-          </div>
-        )}
+      <div className="relative w-full h-48 overflow-hidden">
+        <img
+          src={imageUrl || '/images/noimage.png'}
+          alt={title || 'Feature image'}
+          className="w-full h-full object-contain transition-transform duration-300 hover:scale-110"
+          onError={(e) => {
+            e.target.style.display = 'none';
+          }}
+        />
       </div>
 
       {/* Content Section */}
@@ -214,7 +203,7 @@ const TopChoiceSection = ({ data }) => {
             >
               {validCards.map((card, index) => (
                 <Col
-                  key={card.id || `card-${index}`}
+                  key={card.id || index}
                   xs={xs}
                   sm={sm}
                   md={md}
@@ -227,6 +216,7 @@ const TopChoiceSection = ({ data }) => {
             </Row>
           </motion.div>
         ) : (
+          // placeholder
           <motion.div
             variants={fadeInUp}
             initial="hidden"

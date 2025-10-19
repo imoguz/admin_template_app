@@ -4,11 +4,19 @@ const nextConfig = {
     ACCESS_KEY: process.env.ACCESS_KEY,
   },
   images: {
+    domains: ['localhost', '127.0.0.1', 'production-domain.com'],
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'res.cloudinary.com',
-        pathname: '/**',
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '8000',
+        pathname: '/api/v1/uploads/**',
+      },
+      {
+        protocol: 'http',
+        hostname: '127.0.0.1',
+        port: '8000',
+        pathname: '/api/v1/uploads/**',
       },
     ],
   },

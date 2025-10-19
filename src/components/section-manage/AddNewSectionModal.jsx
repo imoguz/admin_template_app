@@ -53,7 +53,7 @@ const AddNewSectionModal = ({ isModalOpen, setIsModalOpen, projectId }) => {
         'The new section has been successfully added.'
       );
 
-      router.push(`/projects/customize/${projectId}/${res.data._id}`);
+      router.push(`/customize-project/${projectId}/${res.data._id}`);
     } catch (err) {
       notify.error(
         'Request Failed',
