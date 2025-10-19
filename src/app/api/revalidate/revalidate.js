@@ -1,4 +1,3 @@
-// lib/api/revalidate.js
 export class RevalidationService {
   async revalidateProject(slug) {
     try {
@@ -7,7 +6,7 @@ export class RevalidationService {
 
       // Skip if no secret (development)
       if (!secret) {
-        console.log('⚠️  Revalidate secret not set, skipping revalidation');
+        console.log('Revalidate secret not set, skipping revalidation');
         return { skipped: true, reason: 'No secret' };
       }
 
@@ -28,12 +27,12 @@ export class RevalidationService {
       }
 
       const result = await response.json();
-      console.log(`✅ Manual revalidation successful: ${slug}`, result);
+      console.log(`Manual revalidation successful: ${slug}`, result);
 
       return result;
     } catch (error) {
       // Revalidation fail olsa bile işleme devam et
-      console.warn('⚠️ Revalidation failed (non-critical):', error.message);
+      console.warn('Revalidation failed (non-critical):', error.message);
       return { error: error.message, critical: false };
     }
   }
@@ -44,7 +43,7 @@ export class RevalidationService {
       const secret = process.env.REVALIDATE_SECRET;
 
       if (!secret) {
-        console.log('⚠️  Revalidate secret not set, skipping revalidation');
+        console.log(' Revalidate secret not set, skipping revalidation');
         return { skipped: true, reason: 'No secret' };
       }
 
@@ -62,11 +61,11 @@ export class RevalidationService {
       }
 
       const result = await response.json();
-      console.log('✅ Manual revalidation successful: ALL PAGES', result);
+      console.log('Manual revalidation successful: ALL PAGES', result);
 
       return result;
     } catch (error) {
-      console.warn('⚠️ Revalidation failed (non-critical):', error.message);
+      console.warn('Revalidation failed (non-critical):', error.message);
       return { error: error.message, critical: false };
     }
   }
@@ -77,7 +76,7 @@ export class RevalidationService {
       const secret = process.env.REVALIDATE_SECRET;
 
       if (!secret) {
-        console.log('⚠️  Revalidate secret not set, skipping revalidation');
+        console.log(' Revalidate secret not set, skipping revalidation');
         return { skipped: true, reason: 'No secret' };
       }
 
@@ -95,11 +94,11 @@ export class RevalidationService {
       }
 
       const result = await response.json();
-      console.log('✅ Manual revalidation successful: LANDING PAGE', result);
+      console.log('Manual revalidation successful: LANDING PAGE', result);
 
       return result;
     } catch (error) {
-      console.warn('⚠️ Revalidation failed (non-critical):', error.message);
+      console.warn('Revalidation failed (non-critical):', error.message);
       return { error: error.message, critical: false };
     }
   }

@@ -1,30 +1,33 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Row, Col } from 'antd';
+import Image from 'next/image';
 import { motion, useInView } from 'framer-motion';
 import {
   fadeInUp,
   staggerContainer,
 } from '@/utils/constants/animationVariants';
+import { getImageUrl } from '@/utils/helpers';
 
 const TopChoiceCard = ({ card, index }) => {
-  // Image URL
-  const getImageUrl = () => {
+  const [imageError, setImageError] = useState(false);
+
+  const getImageUrlForCard = () => {
     if (!card.image) return null;
 
     if (typeof card.image === 'object' && card.image.url) {
-      return card.image.url;
+      return getImageUrl(card.image.url);
     }
 
     if (typeof card.image === 'string') {
-      return card.image;
+      return getImageUrl(card.image);
     }
 
     return null;
   };
 
-  const imageUrl = getImageUrl();
+  const imageUrl = getImageUrlForCard();
   const { title, subtitle, description } = card;
 
   return (
@@ -42,15 +45,22 @@ const TopChoiceCard = ({ card, index }) => {
       }}
     >
       {/* Image Section */}
-      <div className="relative w-full h-48 overflow-hidden">
-        <img
-          src={imageUrl || '/images/noimage.png'}
-          alt={title || 'Feature image'}
-          className="w-full h-full object-contain transition-transform duration-300 hover:scale-110"
-          onError={(e) => {
-            e.target.style.display = 'none';
-          }}
-        />
+      <div className="relative w-full h-48 overflow-hidden bg-gray-100">
+        {imageUrl && !imageError ? (
+          <Image
+            src={imageUrl}
+            alt={title || 'Feature image'}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+            className="object-contain transition-transform duration-300 hover:scale-110"
+            onError={() => setImageError(true)}
+            onLoad={() => setImageError(false)}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-gray-200">
+            <span className="text-gray-400 text-sm">No image</span>
+          </div>
+        )}
       </div>
 
       {/* Content Section */}
@@ -203,7 +213,7 @@ const TopChoiceSection = ({ data }) => {
             >
               {validCards.map((card, index) => (
                 <Col
-                  key={card.id || index}
+                  key={card.id || `card-${index}`}
                   xs={xs}
                   sm={sm}
                   md={md}
@@ -216,7 +226,6 @@ const TopChoiceSection = ({ data }) => {
             </Row>
           </motion.div>
         ) : (
-          // placeholder
           <motion.div
             variants={fadeInUp}
             initial="hidden"

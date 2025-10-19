@@ -1,6 +1,7 @@
+// components/section-renderer/SectionRenderer.jsx
 'use client';
 
-import { memo } from 'react';
+import React, { memo } from 'react';
 import dynamic from 'next/dynamic';
 
 // Dynamic imports for section components
@@ -24,8 +25,8 @@ const DefaultSection = ({ section }) => (
     </p>
     <div className="bg-white p-4 rounded border">
       <p className="text-sm text-gray-500">
-        ⚠️ Section component for <code>"{section.template?.name}"</code> not
-        found.
+        Section component for <code>&quot;{section.template?.name}&quot;</code>{' '}
+        not found.
       </p>
     </div>
   </div>
@@ -54,14 +55,14 @@ const SectionRenderer = memo(({ section }) => {
   return (
     <section
       id={`section-${section._id}`}
-      className="scroll-mt-20" // Smooth scroll için
+      className="scroll-mt-20"
       data-section-type={section.template?.name}
       data-section-id={section._id}
     >
-      <SectionComponent
-        data={section.data || {}}
-        section={section} // Tüm section prop'unu da geçebiliriz
-      />
+      {/* Loading fallback ekleyelim */}
+      <React.Suspense fallback={<SectionLoading section={section} />}>
+        <SectionComponent data={section.data || {}} section={section} />
+      </React.Suspense>
     </section>
   );
 });

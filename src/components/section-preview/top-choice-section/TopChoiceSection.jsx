@@ -8,21 +8,20 @@ import {
   fadeInUp,
   staggerContainer,
 } from '@/utils/constants/animationVariants';
-import { getImageUrl } from '@/utils/helpers'; // ✅ getImageUrl import et
+import { getImageUrl } from '@/utils/helpers';
 
 const TopChoiceCard = ({ card, index }) => {
   const [imageError, setImageError] = useState(false);
 
-  // Image URL - ✅ getImageUrl kullan
   const getImageUrlForCard = () => {
     if (!card.image) return null;
 
     if (typeof card.image === 'object' && card.image.url) {
-      return getImageUrl(card.image.url); // ✅ getImageUrl kullan
+      return getImageUrl(card.image.url);
     }
 
     if (typeof card.image === 'string') {
-      return getImageUrl(card.image); // ✅ getImageUrl kullan
+      return getImageUrl(card.image);
     }
 
     return null;

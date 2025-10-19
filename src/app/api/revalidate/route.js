@@ -1,4 +1,3 @@
-// app/api/revalidate/route.js
 import { NextResponse } from 'next/server';
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { CACHE } from '@/utils/constants';
@@ -24,7 +23,7 @@ export async function POST(request) {
       revalidateTag(CACHE.TAGS.PROJECTS);
       revalidateTag(CACHE.TAGS.LANDING);
 
-      console.log('✅ Revalidated ALL pages and tags');
+      console.log('Revalidated ALL pages and tags');
 
       return NextResponse.json({
         revalidated: true,
@@ -38,7 +37,7 @@ export async function POST(request) {
       revalidatePath(`/${slug}`);
       revalidateTag(CACHE.TAGS.PROJECT(slug));
 
-      console.log(`✅ Revalidated project: ${slug}`);
+      console.log(`Revalidated project: ${slug}`);
 
       return NextResponse.json({
         revalidated: true,
@@ -51,7 +50,7 @@ export async function POST(request) {
     revalidatePath('/');
     revalidateTag(CACHE.TAGS.LANDING);
 
-    console.log('✅ Revalidated landing page');
+    console.log('Revalidated landing page');
 
     return NextResponse.json({
       revalidated: true,

@@ -1,6 +1,5 @@
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-//  Public API calls for SSR/ISR
 export const publicApi = {
   async getProjectBySlug(slug, revalidate = 3600) {
     try {
