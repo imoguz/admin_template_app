@@ -14,6 +14,8 @@ import DashboardSiderHeader from '@/components/common/DashboardSiderHeader';
 
 const { Header, Sider, Content } = Layout;
 
+const ADMIN_BASE_PATH = process.env.NEXT_PUBLIC_ADMIN_PATH;
+
 export default function AdminLayout({ children }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -21,12 +23,12 @@ export default function AdminLayout({ children }) {
 
   const menuItems = [
     {
-      key: '/dashboard/project-management',
+      key: `/${ADMIN_BASE_PATH}/dashboard/project-management`,
       icon: <ProjectOutlined />,
       label: 'Project Management',
     },
     {
-      key: '/dashboard/section-management',
+      key: `/${ADMIN_BASE_PATH}/dashboard/section-management`,
       icon: <AppstoreOutlined />,
       label: 'Section Management',
     },
@@ -71,11 +73,7 @@ export default function AdminLayout({ children }) {
 
         <Menu
           mode="inline"
-          selectedKeys={[
-            pathname.startsWith('/dashboard/section-templates')
-              ? '/dashboard/section-templates'
-              : '/dashboard/projects',
-          ]}
+          selectedKeys={[pathname]}
           items={menuItems}
           onClick={handleMenuClick}
           className="border-0"

@@ -1,16 +1,20 @@
 import { NextResponse } from 'next/server';
 
-const protectedRoutes = ['/dashboard'];
+const ADMIN_BASE_PATH = process.env.NEXT_PUBLIC_ADMIN_PATH;
+
+const protectedRoutes = [`/${ADMIN_BASE_PATH}`];
 const publicRoutes = ['/auth/login', '/auth/signup', '/auth/forgot-password'];
 
 export function middleware(request) {
   const { pathname } = request.nextUrl;
-  const token = request.cookies.get('accessToken')?.value;
-  const isAuth = Boolean(token);
+  const accessToken = request.cookies.get('accessToken')?.value;
+  const isAuth = Boolean(accessToken);
 
   // If user is authenticated and tries to access auth pages, redirect to projects
   if (isAuth && publicRoutes.some((route) => pathname.startsWith(route))) {
-    return NextResponse.redirect(new URL('/dashboard', request.url));
+    return NextResponse.redirect(
+      new URL(`/${ADMIN_BASE_PATH}/dashboard`, request.url)
+    );
   }
 
   // If user is not authenticated and tries to access protected routes, redirect to login

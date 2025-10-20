@@ -12,6 +12,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 const { Title } = Typography;
+const ADMIN_BASE_PATH = process.env.NEXT_PUBLIC_ADMIN_PATH;
 
 const LoginPage = () => {
   const router = useRouter();
@@ -23,8 +24,7 @@ const LoginPage = () => {
   // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated && token) {
-      const targetPath = redirect || '/dashboard';
-      console.log('Redirecting authenticated user to:', targetPath);
+      const targetPath = redirect || `/${ADMIN_BASE_PATH}/dashboard`;
       router.replace(targetPath);
     }
   }, [isAuthenticated, token, redirect, router]);
@@ -35,7 +35,7 @@ const LoginPage = () => {
 
       notify.success('Login Successful', 'Welcome back!');
 
-      const targetPath = redirect || '/projects';
+      const targetPath = redirect || `/${ADMIN_BASE_PATH}/dashboard`;
       router.replace(targetPath);
     } catch (err) {
       notify.error(
