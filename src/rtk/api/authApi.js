@@ -16,7 +16,7 @@ export const authApi = createApi({
 
     refreshToken: builder.mutation({
       query: (refreshToken) => ({
-        url: '/auth/refresh-token',
+        url: '/auth/refresh',
         method: 'POST',
         body: { refreshToken },
         meta: { skipAuth: true },

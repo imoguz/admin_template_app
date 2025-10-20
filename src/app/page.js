@@ -10,7 +10,6 @@ export default function Home() {
   const { isAuthenticated, isLoading } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    // auth yüklenmemişse (örneğin refresh sonrası)
     if (isLoading) return;
 
     if (isAuthenticated) {
@@ -24,7 +23,6 @@ export default function Home() {
     <div className="w-full h-screen flex flex-col gap-3 items-center justify-center bg-sky-300">
       <h1 className="text-lg font-semibold">Admin Template App</h1>
       <Spin size="large" />
-      <span className="text-blue-500">Redirecting...</span>
     </div>
   );
 }

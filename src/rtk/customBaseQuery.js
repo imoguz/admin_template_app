@@ -29,13 +29,14 @@ export const customBaseQuery = async (args, api, extraOptions) => {
     return result;
   }
 
-  // If the token has expired, refresh it
+  // Refresh token, if expired
   if (result?.error?.status === 401) {
     const refreshToken = Cookies.get('refreshToken');
+
     if (refreshToken) {
       const refreshResult = await rawBaseQuery(
         {
-          url: '/auth/refresh-token',
+          url: '/auth/refresh',
           method: 'POST',
           body: { refreshToken },
           meta: { skipAuth: true },
@@ -45,9 +46,13 @@ export const customBaseQuery = async (args, api, extraOptions) => {
       );
 
       if (refreshResult?.data?.accessToken) {
-        Cookies.set('accessToken', refreshResult.data.accessToken, {
-          expires: 7,
-        });
+        const newToken = refreshResult.data.accessToken;
+
+        Cookies.set('accessToken', newToken, { expires: 1 });
+
+        if (args.headers) {
+          args.headers.set('Authorization', `Bearer ${newToken}`);
+        }
 
         // Retry original query
         result = await rawBaseQuery(args, api, extraOptions);

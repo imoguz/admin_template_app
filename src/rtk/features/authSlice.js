@@ -70,9 +70,9 @@ const authSlice = createSlice({
           const { accessToken, user } = payload;
           state.token = accessToken;
           state.user = user;
-          state.isAuthenticated = getAuthVerifyFromToken(token);
+          state.isAuthenticated = getAuthVerifyFromToken(accessToken);
 
-          Cookies.set('accessToken', token, { expires: 1 });
+          Cookies.set('accessToken', accessToken, { expires: 1 });
         }
       )
 
