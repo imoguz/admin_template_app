@@ -20,11 +20,9 @@ const DefaultSection = ({ section }) => (
     <p className="text-gray-600 mb-4">
       Template: <strong>{section.template?.name}</strong>
     </p>
-    <div className="bg-white p-4 rounded border">
-      <p className="text-sm text-gray-500">
-        Section component for &quot;{section.template?.name}&quot; not found.
-      </p>
-    </div>
+    <p className="text-sm text-gray-500">
+      Section component for &quot;{section.template?.name}&quot; not found.
+    </p>
   </div>
 );
 
