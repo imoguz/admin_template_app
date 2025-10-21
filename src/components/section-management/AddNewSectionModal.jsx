@@ -7,6 +7,8 @@ import { Modal, Select, Spin } from 'antd';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+const ADMIN_BASE_PATH = process.env.NEXT_PUBLIC_ADMIN_PATH;
+
 const AddNewSectionModal = ({ isModalOpen, setIsModalOpen, projectId }) => {
   const router = useRouter();
   const [selectedTemplate, setSelectedTemplate] = useState(null);
@@ -53,7 +55,9 @@ const AddNewSectionModal = ({ isModalOpen, setIsModalOpen, projectId }) => {
         'The new section has been successfully added.'
       );
 
-      router.push(`/customize-project/${projectId}/${res.data._id}`);
+      router.push(
+        `/${ADMIN_BASE_PATH}/customize-project/${projectId}/${res.data._id}`
+      );
     } catch (err) {
       notify.error(
         'Request Failed',

@@ -46,16 +46,14 @@ const SectionForm = ({
     }
   };
 
-  // Form değerleri değiştiğinde otomatik slug oluştur
+  // Auto slug if not manuel edit
   const handleValuesChange = (changedValues, allValues) => {
-    // Eğer name değişti ve slug manuel edit edilmediyse
     if (changedValues.name && !slugEdited) {
       const slug = slugify(changedValues.name);
       form.setFieldsValue({ slug });
     }
   };
 
-  // Slug input'una manuel müdahale edildiğinde
   const handleSlugChange = () => {
     if (!slugEdited) {
       setSlugEdited(true);
@@ -124,7 +122,7 @@ const SectionForm = ({
         </Form.Item>
 
         <Form.Item name="icon" label="Icon">
-          <Input placeholder="Enter icon (e.g., 📄, Settings, User)" />
+          <Input placeholder="Enter icon (e.g. 📄)" />
         </Form.Item>
       </Form>
     </Modal>

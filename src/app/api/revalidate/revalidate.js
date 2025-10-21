@@ -16,7 +16,6 @@ export class RevalidationService {
 
       const response = await fetch(url, {
         method: 'POST',
-        // Timeout after 5 seconds
         signal: AbortSignal.timeout(5000),
       });
 
@@ -31,7 +30,6 @@ export class RevalidationService {
 
       return result;
     } catch (error) {
-      // Revalidation fail olsa bile işleme devam et
       console.warn('Revalidation failed (non-critical):', error.message);
       return { error: error.message, critical: false };
     }

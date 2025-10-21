@@ -50,7 +50,7 @@ const LoginPage = () => {
       <div className="grid grid-cols-2 bg-white rounded-xl max-w-6xl w-full max-h-[600px] h-full overflow-hidden">
         <div className="relative w-full h-full">
           <Image
-            src="/images/secure1.jpg"
+            src="/images/login-secure-image.jpg"
             alt="Secure illustration"
             fill
             className="object-cover"

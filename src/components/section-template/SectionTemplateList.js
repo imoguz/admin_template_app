@@ -1,4 +1,3 @@
-// dashboard/section-management/components/SectionTable.js
 'use client';
 
 import { Button, Popconfirm, Space, Tag, Tooltip } from 'antd';

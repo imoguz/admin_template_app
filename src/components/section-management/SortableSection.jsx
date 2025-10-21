@@ -8,6 +8,8 @@ import { DeleteOutlined } from '@ant-design/icons';
 import { useDeleteSectionMutation } from '@/rtk/api/projectApi';
 import { notify } from '@/utils/helpers';
 
+const ADMIN_BASE_PATH = process.env.NEXT_PUBLIC_ADMIN_PATH;
+
 const SortableSection = ({ section, projectId, sectionId, router }) => {
   const {
     attributes,
@@ -30,7 +32,6 @@ const SortableSection = ({ section, projectId, sectionId, router }) => {
       await deleteSection({ projectId, sectionId: section._id }).unwrap();
       notify.success('Success', 'Section deleted successfully.');
     } catch (err) {
-      console.error(err);
       notify.error('Error', 'Failed to delete section.');
     }
   };
@@ -46,7 +47,9 @@ const SortableSection = ({ section, projectId, sectionId, router }) => {
         isDragging ? 'opacity-50 shadow-lg' : 'border border-gray-200'
       } border-solid rounded-lg select-none min-h-12 p-1 cursor-pointer`}
       onClick={() =>
-        router.push(`/customize-project//${projectId}/${section._id}`)
+        router.push(
+          `/${ADMIN_BASE_PATH}/customize-project/${projectId}/${section._id}`
+        )
       }
     >
       <div
