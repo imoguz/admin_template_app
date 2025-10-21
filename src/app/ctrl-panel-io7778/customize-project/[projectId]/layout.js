@@ -2,16 +2,12 @@
 
 import { useState } from 'react';
 import { Layout, Divider, Button, Spin } from 'antd';
-import {
-  EyeOutlined,
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-} from '@ant-design/icons';
+import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import CustomizeSiderHeader from '@/components/common/CustomizeSiderHeader';
 import { useGetProjectQuery } from '@/rtk/api/projectApi';
-import SectionManager from '@/components/section-manage/SectionManager';
+import SectionManager from '@/components/section-management/SectionManager';
 
 const { Header, Content, Sider } = Layout;
 
@@ -80,20 +76,6 @@ export default function CustomizeLayout({ children, params }) {
             onClick={() => setCollapsed(!collapsed)}
             className="absolute top-1/2 right-0 -translate-y-1/2 h-10 w-10 text-xl"
           />
-        </div>
-
-        <Divider className="border-gray-200 my-0" />
-
-        <div className="px-3 pt-2">
-          <Button
-            type="default"
-            shape={collapsed ? 'circle' : 'default'}
-            icon={<EyeOutlined />}
-            block
-            onClick={() => router.push(`/customize-project/${projectId}`)}
-          >
-            {collapsed ? '' : 'Preview Project'}
-          </Button>
         </div>
 
         <Divider className="border-gray-200 my-2" />

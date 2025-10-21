@@ -42,6 +42,8 @@ const countActiveSections = (sections) => {
   return sections?.filter((section) => section.isActive).length || 0;
 };
 
+const ADMIN_BASE_PATH = process.env.NEXT_PUBLIC_ADMIN_PATH;
+
 export default function ProjectsPage() {
   const router = useRouter();
   const [tableState, setTableState] = useState({ offset: 0, searchText: '' });
@@ -66,10 +68,9 @@ export default function ProjectsPage() {
     [projects]
   );
 
-  // Event handlers
   const handleRowClick = useCallback(
     (record) => {
-      router.push(`/customize-project/${record._id}`);
+      router.push(`/${ADMIN_BASE_PATH}/customize-project/${record._id}`);
     },
     [router]
   );

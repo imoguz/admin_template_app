@@ -10,14 +10,14 @@ export function middleware(request) {
   const accessToken = request.cookies.get('accessToken')?.value;
   const isAuth = Boolean(accessToken);
 
-  // If user is authenticated and tries to access auth pages, redirect to projects
+  // Authenticated users trying to access auth pages → redirect to dashboard
   if (isAuth && publicRoutes.some((route) => pathname.startsWith(route))) {
     return NextResponse.redirect(
       new URL(`/${ADMIN_BASE_PATH}/dashboard`, request.url)
     );
   }
 
-  // If user is not authenticated and tries to access protected routes, redirect to login
+  // Unauthenticated users trying to access protected routes → redirect to login
   if (!isAuth && protectedRoutes.some((route) => pathname.startsWith(route))) {
     const loginUrl = new URL('/auth/login', request.url);
     loginUrl.searchParams.set('redirect', pathname);

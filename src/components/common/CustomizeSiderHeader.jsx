@@ -1,12 +1,13 @@
 'use client';
 
 import React from 'react';
-import { BellOutlined, LeftOutlined, SettingOutlined } from '@ant-design/icons';
+import { EyeOutlined, LeftOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/navigation';
-import UserMenu from './UserMenu';
 import { Button, Tag } from 'antd';
 import { Typography } from 'antd';
 const { Title } = Typography;
+
+const ADMIN_BASE_PATH = process.env.NEXT_PUBLIC_ADMIN_PATH;
 
 const CustomizeSiderHeader = ({ project, section = 'Preview Mode' }) => {
   const router = useRouter();
@@ -16,7 +17,9 @@ const CustomizeSiderHeader = ({ project, section = 'Preview Mode' }) => {
       <Button
         type="default"
         icon={<LeftOutlined />}
-        onClick={() => router.push(`/dashboard/project-management`)}
+        onClick={() =>
+          router.push(`/${ADMIN_BASE_PATH}/dashboard/project-management`)
+        }
       >
         Back to Projects
       </Button>
@@ -28,7 +31,19 @@ const CustomizeSiderHeader = ({ project, section = 'Preview Mode' }) => {
           {section}
         </Tag>
       </div>
-      <div className="flex gap-5 items-center"></div>
+      <div className="flex gap-5 items-center">
+        <Button
+          type="default"
+          shape="default"
+          icon={<EyeOutlined />}
+          block
+          onClick={() =>
+            router.push(`/${ADMIN_BASE_PATH}/customize-project/${project?._id}`)
+          }
+        >
+          Preview
+        </Button>
+      </div>
     </div>
   );
 };

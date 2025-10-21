@@ -35,9 +35,8 @@ export default async function ProjectPage({ params }) {
   if (!project) {
     notFound();
   }
-
+  console.log(project.sections);
   const sortedSections = project.sections || [];
-
   return (
     <div className="min-h-screen bg-white">
       <main>

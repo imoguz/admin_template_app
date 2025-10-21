@@ -3,7 +3,7 @@
 import { Modal, Form, Input, Button, message } from 'antd';
 import { useEffect, useState } from 'react';
 
-// Slug oluşturma fonksiyonu
+// Slug
 const slugify = (text) =>
   text
     ?.toString()
@@ -30,7 +30,7 @@ const SectionForm = ({
       setSlugEdited(false);
       if (initialValues) {
         form.setFieldsValue(initialValues);
-        setSlugEdited(true); // Edit modunda slug zaten edited kabul et
+        setSlugEdited(true);
       }
     }
   }, [open, initialValues, form]);

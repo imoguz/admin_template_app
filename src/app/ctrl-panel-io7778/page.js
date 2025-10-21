@@ -3,11 +3,13 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
+const ADMIN_BASE_PATH = process.env.NEXT_PUBLIC_ADMIN_PATH;
+
 export default function AdminRootPage() {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace('/ctrl-panel-io7778/dashboard');
+    router.replace(`/${ADMIN_BASE_PATH}/dashboard`);
   }, [router]);
 
   return (

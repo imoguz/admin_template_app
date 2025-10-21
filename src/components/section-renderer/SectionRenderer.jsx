@@ -1,16 +1,8 @@
 'use client';
 
 import React, { memo } from 'react';
-import dynamic from 'next/dynamic';
 import { Skeleton, Row, Col } from 'antd';
-
-const sectionComponents = {
-  'Top Choice Section': dynamic(() => import('./top-choice/TopChoiceSection')),
-  'Hero Section': dynamic(() => import('./hero/HeroSection')),
-  'Featured Product Section': dynamic(() =>
-    import('./featured-product/FeaturedProductSection')
-  ),
-};
+import { sections } from '@/lib/api/sections';
 
 const DefaultSection = ({ section }) => (
   <div className="border-2 border-dashed border-yellow-400 bg-yellow-50 p-8 rounded-lg text-center my-8">
@@ -19,9 +11,10 @@ const DefaultSection = ({ section }) => (
     </h3>
     <p className="text-gray-600 mb-4">
       Template: <strong>{section.template?.name}</strong>
+      {section.template?.slug && ` (${section.template.slug})`}
     </p>
     <p className="text-sm text-gray-500">
-      Section component for &quot;{section.template?.name}&quot; not found.
+      Section component for &quot;{section.template?.slug}&quot; not found.
     </p>
   </div>
 );
@@ -36,12 +29,14 @@ const SectionLoading = () => (
   </div>
 );
 
-const SectionRenderer = memo(({ section }) => {
-  if (!section?.isActive) {
+const SectionRenderer = memo(({ section, isPreview = false, projectId }) => {
+  if (!section?.isActive && !isPreview) {
     return null;
   }
 
-  const SectionComponent = sectionComponents[section.template?.name];
+  // Slug-based component lookup
+  const sectionSlug = section.template?.slug;
+  const SectionComponent = sections[sectionSlug];
 
   if (!SectionComponent) {
     return <DefaultSection section={section} />;
@@ -51,11 +46,16 @@ const SectionRenderer = memo(({ section }) => {
     <section
       id={`section-${section._id}`}
       className="scroll-mt-20"
-      data-section-type={section.template?.name}
+      data-section-type={sectionSlug}
       data-section-id={section._id}
     >
       <React.Suspense fallback={<SectionLoading />}>
-        <SectionComponent data={section.data || {}} section={section} />
+        <SectionComponent
+          data={section.data || {}}
+          section={section}
+          isPreview={isPreview}
+          projectId={projectId}
+        />
       </React.Suspense>
     </section>
   );
